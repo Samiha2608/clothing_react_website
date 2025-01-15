@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
@@ -8,7 +8,24 @@ import { selectHome } from '../features/homeSlice';
 const HomePage = () => {
   const { title, description, bestSellers } = useSelector(selectHome);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 1; // Show one item per page in mobile view
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+
+  // Update itemsPerPage based on screen size
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth >= 1024) {
+        setItemsPerPage(4); // Large screens
+      } else if (window.innerWidth >= 768) {
+        setItemsPerPage(3); // Medium screens
+      } else {
+        setItemsPerPage(1); // Small screens
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => window.removeEventListener('resize', updateItemsPerPage);
+  }, []);
 
   const handleNext = () => {
     if (currentIndex + itemsPerPage < bestSellers.length) {
@@ -48,8 +65,7 @@ const HomePage = () => {
         <section className="py-12">
           <h2 className="text-3xl font-bold text-center mb-6">Best Selling</h2>
           <p className="text-center mb-10">
-            Get in on the trend with our curated selection of best-selling
-            styles.
+            Get in on the trend with our curated selection of best-selling styles.
           </p>
           <div className="relative max-w-screen-xl mx-auto px-6">
             {/* Left Arrow */}
@@ -66,7 +82,7 @@ const HomePage = () => {
             </button>
 
             {/* Product Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${itemsPerPage} gap-6`}>
               {bestSellers
                 .slice(currentIndex, currentIndex + itemsPerPage)
                 .map((item) => (
@@ -128,41 +144,6 @@ const HomePage = () => {
                 Shop Now
               </button>
             </div>
-          </div>
-        </section>
-
-        {/* Feedback Section */}
-        <section className="py-12">
-          <h2 className="text-3xl font-bold text-center mb-6">
-            Clients Feedback
-          </h2>
-          <p className="text-center mb-10">What our clients say about us!</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-screen-xl mx-auto px-6">
-            {[
-              {
-                feedback:
-                  'The customer experience was exceptional from start to finish. The website is user-friendly, the checkout process was smooth, and the clothes I ordered fit perfectly. I’m beyond satisfied!',
-                name: 'Maria Shabbir',
-              },
-              {
-                feedback:
-                  'I absolutely love the quality and style of the clothing I purchased from this website. Customer service was outstanding, and I received my order quickly. Highly recommended!',
-                name: 'Beenish Mumtaz',
-              },
-              {
-                feedback:
-                  'I had a great experience shopping on this website. The clothes I bought are fashionable and comfortable. Highly satisfied!',
-                name: 'Ayra Khan',
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-lg p-6 hover:bg-[#EFE8C2] transition-transform transform hover:scale-105"
-              >
-                <p className="font-bold text-[#585B42]">{item.name}</p>
-                <p className="text-gray-600 italic mt-4">"{item.feedback}"</p>
-              </div>
-            ))}
           </div>
         </section>
       </main>
