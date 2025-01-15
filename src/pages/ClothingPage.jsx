@@ -13,8 +13,9 @@ const ClothingPage = () => {
     brands: [],
     sizes: [],
   });
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFilterVisible, setIsFilterVisible] = useState(false); // State to manage filter visibility
 
-  // Handler to update filters
   const handleFilterChange = (filterType, value) => {
     setFilters((prev) => {
       const updatedFilters = { ...prev };
@@ -27,7 +28,6 @@ const ClothingPage = () => {
     });
   };
 
-  // Filter clothing items based on selected filters
   const filteredItems = clothingItems.filter(item => {
     const withinPriceRange = item.price >= filters.priceRange[0] && item.price <= filters.priceRange[1];
     const matchesCategory = filters.categories.length === 0 || filters.categories.includes(item.filter);
@@ -36,6 +36,18 @@ const ClothingPage = () => {
     
     return withinPriceRange && matchesCategory && matchesBrand && matchesSize;
   });
+
+  const handleNext = () => {
+    if (currentIndex + 1 < filteredItems.length) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
 
   return (
     <div className="bg-[#F5F3DB] min-h-screen flex flex-col">
@@ -50,10 +62,9 @@ const ClothingPage = () => {
       </section>
 
       {/* Filter and Products Section */}
-      <main className="flex-grow py-10 max-w-screen-xl mx-auto flex">
+      <main className="flex-grow py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row">
         {/* Left Side: Filter Options */}
-        <div className="w-1/4 bg-white rounded-lg shadow-lg p-4 mr-4">
-          {/* Total Count of Products */}
+        <div className={`w-full md:w-1/4 bg-white rounded-lg shadow-lg p-4 mb-4 md:mb-0 ${isFilterVisible ? 'block' : 'hidden'}`}>
           <h4 className="text-lg font-bold mb-4">Total Products: {filteredItems.length}</h4>
 
           {/* Price Filter */}
@@ -104,25 +115,60 @@ const ClothingPage = () => {
           </ul>
         </div>
 
+        {/* Toggle Button for Filters */}
+        <button 
+          onClick={() => setIsFilterVisible(prev => !prev)} 
+          className="md:hidden bg-[#6F6A42] text-white py-2 px-4 rounded-md mb-4 self-start mx-auto"
+        >
+          {isFilterVisible ? 'Hide Filters' : 'Show Filters'}
+        </button>
+
         {/* Right Side: Products Display */}
-        <div className="w-3/4">
+        <div className="w-full md:w-3/4">
           <h2 className="text-2xl font-bold text-center mb-4">Clothing Collection</h2>
-          <div className="min-h-[300px]"> {/* Set a fixed height for the product display area */}
+          <div className="min-h-[300px]">
             {filteredItems.length === 0 ? (
               <p className="text-center text-lg">No items match your filters.</p>
             ) : (
-              <div className="grid grid-cols-3 gap-4">
-                {filteredItems.map((item) => (
-                  <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <img src={item.image} alt={item.name} className="w-full" />
-                    <div className="p-4">
-                      <h3 className="text-lg font-bold text-[#585B42]">{item.name}</h3>
-                      <Link to={`/product/${item.id}`}>
-                        <button className="bg-[#585B42] text-white py-2 px-4 rounded-md mt-2">View Details</button>
-                      </Link>
-                    </div>
+              <div className="relative">
+                {/* Left Arrow */}
+                <button
+                  onClick={handlePrev}
+                  className={`absolute left-0 top-1/2 transform -translate-y-1/2 bg-[#585B42] text-white w-10 h-10 rounded-full flex items-center justify-center ${
+                    currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
+                  }`}
+                  disabled={currentIndex === 0}
+                >
+                  &lt;
+                </button>
+
+                {/* Product Grid */}
+                <div className="flex justify-center">
+                  <div className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4">
+                    {filteredItems.slice(currentIndex, currentIndex + 1).map((item) => (
+                      <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <img src={item.image} alt={item.name} className="w-full" />
+                        <div className="p-4">
+                          <h3 className="text-lg font-bold text-[#585B42]">{item.name}</h3>
+                          <Link to={`/product/${item.id}`}>
+                            <button className="bg-[#585B42] text-white py-2 px-4 rounded-md mt-2">View Details</button>
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* Right Arrow */}
+                <button
+                  onClick={handleNext}
+                  className={`absolute right-0 top-1/2 transform -translate-y-1/2 bg-[#585B42] text-white w-10 h-10 rounded-full flex items-center justify-center ${
+                    currentIndex + 1 >= filteredItems.length ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
+                  }`}
+                  disabled={currentIndex + 1 >= filteredItems.length}
+                >
+                  &gt;
+                </button>
               </div>
             )}
           </div>

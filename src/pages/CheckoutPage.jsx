@@ -90,7 +90,7 @@ const CheckoutPage = () => {
     <div className="flex flex-col min-h-screen bg-gray-300">
       <Header />
 
-      <main className="flex-1 p-8 mt-10 mx-4"> {/* Added margins here */}
+      <main className="flex-1 p-8 mt-10 mx-4">
         <div className="bg-gray-900 text-white p-4 text-center text-2xl mb-4">Checkout</div>
         
         {orderPlaced ? (
@@ -125,43 +125,43 @@ const CheckoutPage = () => {
               )}
             </div>
 
-            <div className="flex justify-between mb-8">
+            <div className="flex justify-between mb-8 flex-wrap">
               <button
                 onClick={() => setStep(1)}
-                className={`py-2 px-4 ${step === 1 ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+                className={`py-2 px-4 w-full sm:w-auto ${step === 1 ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
               >
                 Personal Information
               </button>
               <button
                 onClick={() => setStep(2)}
-                className={`py-2 px-4 ${step === 2 ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+                className={`py-2 px-4 w-full sm:w-auto ${step === 2 ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
               >
                 Shipping Information
               </button>
               <button
                 onClick={() => setStep(3)}
-                className={`py-2 px-4 ${step === 3 ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+                className={`py-2 px-4 w-full sm:w-auto ${step === 3 ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
               >
                 Order Summary
               </button>
             </div>
 
-            <div className="steps mb-8 flex items-center justify-between">
-              <div className="flex items-center">
+            <div className="steps mb-8 flex items-center justify-between flex-wrap">
+              <div className="flex items-center mb-4 sm:mb-0">
                 <div className={`step ${step >= 1 ? 'active' : ''}`}>
                   <FaCheckCircle />
                 </div>
                 <span className="ml-2">Step 1</span>
               </div>
               <div className={`flex-1 border-t-2 ${step > 1 ? 'border-gray-800' : 'border-gray-200'}`}></div>
-              <div className="flex items-center">
+              <div className="flex items-center mb-4 sm:mb-0">
                 <div className={`step ${step >= 2 ? 'active' : ''}`}>
                   <FaCheckCircle />
                 </div>
                 <span className="ml-2">Step 2</span>
               </div>
               <div className={`flex-1 border-t-2 ${step > 2 ? 'border-gray-800' : 'border-gray-200'}`}></div>
-              <div className="flex items-center">
+              <div className="flex items-center mb-4 sm:mb-0">
                 <div className={`step ${step === 3 ? 'active' : ''}`}>
                   <FaCheckCircle />
                 </div>
@@ -209,7 +209,7 @@ const CheckoutPage = () => {
                   <button
                     type="button"
                     onClick={handleNextStep}
-                    className="bg-yellow-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-yellow-400 transition-colors"
+                    className="bg-yellow-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-yellow-400 transition-colors w-full sm:w-auto"
                   >
                     Next
                   </button>
@@ -269,14 +269,14 @@ const CheckoutPage = () => {
                     <button
                       type="button"
                       onClick={handlePreviousStep}
-                      className="bg-gray-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors"
+                      className="bg-gray-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors w-full sm:w-auto"
                     >
                       Back
                     </button>
                     <button
                       type="button"
                       onClick={handleNextStep}
-                      className="bg-yellow-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-yellow-400 transition-colors"
+                      className="bg-yellow-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-yellow-400 transition-colors w-full sm:w-auto"
                     >
                       Next
                     </button>
@@ -303,14 +303,14 @@ const CheckoutPage = () => {
                   <button
                     type="button"
                     onClick={handlePreviousStep}
-                    className="bg-gray-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors"
+                    className="bg-gray-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors w-full sm:w-auto"
                   >
                     Back
                   </button>
                   <button
                     type="button"
                     onClick={handlePlaceOrder}
-                    className="bg-yellow-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-yellow-400 transition-colors"
+                    className="bg-yellow-300 text-black py-2 px-4 rounded-lg shadow-md hover:bg-yellow-400 transition-colors w-full sm:w-auto"
                   >
                     Place Order
                   </button>

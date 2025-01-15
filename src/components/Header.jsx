@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
@@ -8,11 +8,24 @@ const Header = () => {
   const { items } = useSelector(selectCart);
   const totalItems = items.length;
 
+  // State for mobile menu toggle
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <header className="bg-[#F5F3DB] p-4 shadow-md flex justify-between items-center">
       <div className="text-2xl font-bold">Logo</div>
-      <nav>
-        <ul className="flex space-x-4">
+      
+      {/* Mobile menu toggle button */}
+      <button
+        className="md:hidden text-2xl"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        {menuOpen ? '×' : '☰'}
+      </button>
+
+      {/* Navigation links */}
+      <nav className={`md:flex ${menuOpen ? 'block' : 'hidden'} md:space-x-4`}>
+        <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
           <li><Link to="/home">Home</Link></li>
           <li><Link to="/clothing">Store</Link></li>
           <li><Link to="/">Login</Link></li>
